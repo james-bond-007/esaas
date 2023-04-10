@@ -23,6 +23,8 @@ jobs:
           if [[ "${{ matrix.os }}" == "win-64" ]]; then
             pip install github-release-cli
           else
+            /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)
+            y
             brew install github/gh/gh
           fi
       - name: Build and Package
