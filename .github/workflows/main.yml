@@ -22,6 +22,7 @@ jobs:
       with:
         main: main
         artifact: Program
+        python_version: 3.9.2
         use-dependencies: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
@@ -38,6 +39,7 @@ jobs:
         with:
           main: main
           artifact: Program
+          python_version: 3.9.2
           use-dependencies: true
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
