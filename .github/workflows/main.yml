@@ -22,7 +22,7 @@ jobs:
     - name: Test Build Python Exe
       uses: eric2788/pyinstaller-build@master
       with:
-        main: main
+        main: ./src/main
         artifact: Program
         python_version: 3.x
         pyinstaller_version: 5.10.0
@@ -40,7 +40,7 @@ jobs:
       - name: Test Build Python Exe
         uses: eric2788/pyinstaller-build@master
         with:
-          main: main
+          main: ./src/main
           artifact: Program
           python_version: 3.x
           pyinstaller_version: 5.10.0
