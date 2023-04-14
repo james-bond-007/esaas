@@ -25,6 +25,7 @@ jobs:
         main: main
         artifact: Program
         python_version: 3.x
+        pyinstaller_version: 5.10.0
         use-dependencies: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
@@ -42,6 +43,7 @@ jobs:
           main: main
           artifact: Program
           python_version: 3.x
+          pyinstaller_version: 5.10.0
           use-dependencies: true
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
