@@ -2,8 +2,10 @@ name: Publish
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+    # tags:
+    #   - '*'
 
 jobs:
   publish:
