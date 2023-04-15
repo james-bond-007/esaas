@@ -18,7 +18,7 @@ jobs:
   build_linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Test Build Python Exe
       uses: eric2788/pyinstaller-build@master
       with:
@@ -36,7 +36,7 @@ jobs:
   build_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test Build Python Exe
         uses: eric2788/pyinstaller-build@master
         with:
@@ -57,14 +57,20 @@ jobs:
     env:
       RELEASE_TAG: ${{ github.ref }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          release_name: "Release ${env.RELEASE_TAG}"
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Please refer to [CHANGELOG.md](https://github.com/f5l5y5/axios-abort/blob/main/CHANGELOG.md) for details.
+          draft: false
+          prerelease: false
       - name: Upload Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1.0.1
