@@ -31,7 +31,7 @@ jobs:
       with:
         main: ./src/main
         python_version: 3.x
-        pyinstaller_version: 5.10.0
+        pyinstaller_version: 5.x
         use-dependencies: true
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
@@ -40,3 +40,5 @@ jobs:
         file: target/release/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+        permissions:
+          contents: write
