@@ -30,7 +30,7 @@ jobs:
       uses: eric2788/pyinstaller-build@master
       with:
         main: ./src/main
-        # python_version: 3.x
+        python_version: 3.x
         # pyinstaller_version: 5.x
         use-dependencies: true
     - name: Upload binaries to release

@@ -13,8 +13,10 @@ on:
     branches:
     - main
     # - release/*
+    
 permissions:
   actions: write
+
 jobs:
   build_linux:
     runs-on: ubuntu-latest
