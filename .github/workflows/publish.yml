@@ -5,7 +5,8 @@ on:
     branches:
     - main
     # - release/*
-
+permissions:
+  actions: write
 jobs:
   publish:
     name: Publish for ${{ matrix.os }}
