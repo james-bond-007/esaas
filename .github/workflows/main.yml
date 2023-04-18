@@ -33,7 +33,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: python
+        name: python_linux
         path: ${{ github.workspace }}/dist
         
   build_windows:
@@ -53,3 +53,20 @@ jobs:
         with:
           name: python_exe
           path: dist
+  build_mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Test Build Python Exe
+      uses: eric2788/pyinstaller-build@master
+      with:
+        main: ./src/main
+        artifact: Program
+        python_version: 3.x
+        pyinstaller_version: 5.10.0
+        use-dependencies: true
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: python_macos
+        path: ${{ github.workspace }}/dist
