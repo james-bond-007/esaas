@@ -36,7 +36,7 @@ jobs:
         python -m pip install --upgrade pip 
         pip install -r requirements.txt
         pip install pyinstaller==5.10.0
-        pyinstaller --clean -y --dist ./dist $NO_CONSOLE $ICON --name main --onefile ./src/main.py
+        pyinstaller --clean -y --dist ./dist --name main --onefile ./src/main.py
         chown -R --reference=../dist
         
     - name: Test Build Python Exe

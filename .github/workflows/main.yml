@@ -33,7 +33,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: python_exe
+        name: python
         path: ${{ github.workspace }}/dist
         
   build_windows:
