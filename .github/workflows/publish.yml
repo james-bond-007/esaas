@@ -5,8 +5,7 @@ on:
     branches:
     - main
     # - release/*
-permissions:
-  actions: write
+
 jobs:
   publish:
     name: Publish for ${{ matrix.os }}
@@ -23,9 +22,23 @@ jobs:
           - os: macos-latest
             artifact_name: mything
             asset_name: mything-macos-amd64
+    
 
     steps:
     - uses: actions/checkout@v3
+    - name: setup python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.x
+    - name: build exe with pyinstaller
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip 
+        pip install -r requirements.txt
+        pip install pyinstaller==5.10.0
+        pyinstaller --clean -y --dist ./dist $NO_CONSOLE $ICON --name main --onefile ./src/main.py
+        chown -R --reference=../dist
+        
     - name: Test Build Python Exe
       uses: eric2788/pyinstaller-build@master
       with:
@@ -40,4 +53,5 @@ jobs:
         file: dist/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+
         
