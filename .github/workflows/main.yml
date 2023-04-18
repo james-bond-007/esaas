@@ -13,7 +13,7 @@ on:
     branches:
     - main
     # - release/*
-    
+
 permissions:
   actions: write
 
@@ -54,7 +54,7 @@ jobs:
       #     name: python_exe
       #     path: dist
       - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@v3
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: dist/program.exe
