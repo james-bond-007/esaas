@@ -31,7 +31,7 @@ jobs:
       with:
         main: ./src/main
         python_version: 3.x
-        pyinstaller_version: 5.x
+        pyinstaller_version: 5.10.0
         use-dependencies: true
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
