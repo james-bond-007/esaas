@@ -34,7 +34,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: python_exe
-        path: ${{ github.workspace }}/app/build/outputs/apk/release
+        path: ${{ github.workspace }}/dist
         
   build_windows:
     runs-on: windows-latest
