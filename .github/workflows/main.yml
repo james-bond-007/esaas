@@ -49,7 +49,7 @@ jobs:
           pyinstaller_version: 5.10.0
           use-dependencies: true
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: python_exe
           path: dist
@@ -61,7 +61,7 @@ jobs:
       uses: james-bond-007/pyinstaller-build@master
       with:
         main: ./src/main
-        artifact: Program
+        artifact: Program.dmg
         python_version: 3.x
         pyinstaller_version: 5.10.0
         use-dependencies: true

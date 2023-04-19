@@ -37,21 +37,11 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller==5.10.0
         pyinstaller --clean -y --dist ./dist --name main --onefile ./src/main.py
-        chown -R $(stat -c '%u:%g' .) ./dist
-        
-    - name: Test Build Python Exe
-      uses: eric2788/pyinstaller-build@master
+        # chown -R $(stat -c '%u:%g' .) ./dist
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
       with:
-        main: ./src/main
-        python_version: 3.x
-        pyinstaller_version: 5.10.0
-        use-dependencies: true
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: dist/${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}
+        name: python_macos
+        path: ${{ github.workspace }}/dist
 
         
