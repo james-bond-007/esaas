@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Test Build Python Exe
-      uses: eric2788/pyinstaller-build@master
+      uses: james-bond-007/pyinstaller-build@master
       with:
         main: ./src/main
         artifact: Program
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test Build Python Exe
-        uses: eric2788/pyinstaller-build@master
+        uses: james-bond-007/pyinstaller-build@master
         with:
           main: ./src/main
           artifact: Program
@@ -58,7 +58,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Test Build Python Exe
-      uses: eric2788/pyinstaller-build@master
+      uses: james-bond-007/pyinstaller-build@master
       with:
         main: ./src/main
         artifact: Program
