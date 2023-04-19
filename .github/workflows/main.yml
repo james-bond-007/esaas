@@ -44,7 +44,7 @@ jobs:
         uses: james-bond-007/pyinstaller-build@master
         with:
           main: ./src/main
-          artifact: Program
+          artifact: Program.exe
           python_version: 3.x
           pyinstaller_version: 5.10.0
           use-dependencies: true
