@@ -27,6 +27,7 @@ jobs:
       with:
         main: ./main
         artifact: Program
+        icon: /src/main.ico
         python_version: 3.x
         pyinstaller_version: 5.10.0
         use-dependencies: true
@@ -45,6 +46,7 @@ jobs:
         with:
           main: ./main
           artifact: Program.exe
+          icon: /src/main.ico
           python_version: 3.x
           pyinstaller_version: 5.10.0
           use-dependencies: true
