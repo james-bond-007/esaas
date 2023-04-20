@@ -1,24 +1,24 @@
 import sys
 import os
 import random
-from enum import Enum, unique
-from typing import Type
+from enum import Enum
+# from typing import Type
 from PySide6 import QtCore, QtWidgets, QtGui, QtMultimedia
-from PySide6.QtCore import Qt
 import operator
-import pygame
+# from pygame import mixer, time
 
-pygame.mixer.pre_init(44100, -16, 2, 1024)
-pygame.mixer.init()
+# mixer.pre_init(44100, -16, 2, 1024)
+# mixer.init()
 
-def play_audio_file(file_path):
-    pygame.mixer.music.load(file_path)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
-def play_audio_file_async(file_path):
-    sound = pygame.mixer.Sound(file_path)
-    sound.play()
+# def play_audio_file(file_path):
+#     mixer.music.load(file_path)
+#     mixer.music.play()
+#     while mixer.music.get_busy():
+#         time.Clock().tick(10)
+# def play_audio_file_async(file_path):
+#     sound = mixer.Sound(file_path)
+#     sound.play()
+
 
 class CalcType(str, Enum):
     Addition = "连加"
@@ -26,18 +26,21 @@ class CalcType(str, Enum):
     AdditionSubtraction = "先加后减"
     SubtractionAddition = "先减后加"
 
+
 class MyWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        path = sys.argv[0]  # 获取本文件路径
-        print(path)
-        filename = os.path.basename(path)  # 获取本文件名
-        self.path = os.path.dirname(os.path.realpath(sys.argv[0]))  # 获取本文件所在目录
-        print(self.path)
-        filelist = os.listdir(self.path)  # 获取文件名列表
-        filelist.remove(filename)  # 从目录的文件里面去除本文件的文件名
-        print(filelist)
+        # path = sys.argv[0]  # 获取本文件路径
+        # print(path)
+        # filename = os.path.basename(path)  # 获取本文件名
+        # self.path = os.path.dirname(os.path.realpath(sys.argv[0]))  # 获取本文件所在目录
+        # print(self.path)
+        # filelist = os.listdir(self.path)  # 获取文件名列表
+        # filelist.remove(filename)  # 从目录的文件里面去除本文件的文件名
+        # print(filelist)
+        # self.path = os.getcwd()
+        # print(self.path)
 
         self.select = CalcType.Addition
         self.result = 0
@@ -46,19 +49,29 @@ class MyWidget(QtWidgets.QWidget):
         self.setup_ui()
         self.d_generate()
 
-        self.correct_player =  QtMultimedia.QSoundEffect()
-        self.correct_player.setSource(QtCore.QUrl.fromLocalFile(self.path + "/src/correct.wav"))
+        self.correct_player = QtMultimedia.QSoundEffect()
+        self.correct_player.setSource(
+            QtCore.QUrl.fromLocalFile(self.resource_path("./src/correct.wav")))
         self.correct_player.setLoopCount(1)
         self.correct_player.setVolume(1.0)
         self.incorrect_player = QtMultimedia.QSoundEffect()
-        self.incorrect_player.setSource(QtCore.QUrl.fromLocalFile(self.path + "/src/incorrect.wav"))
+        self.incorrect_player.setSource(
+            QtCore.QUrl.fromLocalFile(self.resource_path("./src/incorrect.wav")))
         self.incorrect_player.setLoopCount(1)
         self.incorrect_player.setVolume(1.0)
-        
+
+    def resource_path(self, relative_path):
+        # Get absolute path to resource,
+        # works for dev and for PyInstaller
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        return os.path.join(base_path,relative_path)
+
     def print_calc(self, a: int, b: int, c: int, operator1: str, operator2: str) -> str:
-        valid_operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
+        valid_operators = {"+": operator.add, "-": operator.sub,
+                           "*": operator.mul, "/": operator.truediv}
         if operator1 not in valid_operators or operator2 not in valid_operators:
-            raise ValueError(f"Invalid operator name: {operator1} or {operator2}")
+            raise ValueError(
+                f"Invalid operator name: {operator1} or {operator2}")
         op_func1 = valid_operators[operator1]
         op_func2 = valid_operators[operator2]
         self.result = op_func2(op_func1(a, b), c)
@@ -111,15 +124,17 @@ class MyWidget(QtWidgets.QWidget):
             if self.result == int(self.line_edit.text()):
                 self.label_B.setStyleSheet("color:green;")
                 self.label_B.setText("✓")
-                self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/laught.png"))
-                # self.correct_player.play()
-                play_audio_file_async(self.path + "/src/correct.wav")
+                self.label_C.setPixmap(QtGui.QPixmap(
+                    self.resource_path("./src/laught.png")))
+                self.correct_player.play()
+                # play_audio_file_async(self.path + "/src/correct.wav")
             else:
                 self.label_B.setStyleSheet("color:red;")
                 self.label_B.setText("✗")
-                self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/cry.png"))
-                # self.incorrect_player.play()
-                play_audio_file_async(self.path + "/src/incorrect.wav")
+                self.label_C.setPixmap(
+                    QtGui.QPixmap(self.resource_path("./src/cry.png")))
+                self.incorrect_player.play()
+                # play_audio_file_async(self.path + "/src/incorrect.wav")
         except ValueError:
             message_box = QtWidgets.QMessageBox()
             message_box.setText("请输入数字！")
@@ -129,13 +144,14 @@ class MyWidget(QtWidgets.QWidget):
         self.print_20_mix()
         self.line_edit.setText("")
         self.label_B.setText("    ")
-        self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/None.png"))
+        self.label_C.setPixmap(QtGui.QPixmap(self.resource_path("./src/None.png")))
 
     def setup_ui(self) -> None:
         """设置界面"""
         # 题目类型
         self.type_groupbox = QtWidgets.QGroupBox("类型")
-        self.type_groupbox.setFont(QtGui.QFont("Helvetica", 16, QtGui.QFont.Bold))
+        self.type_groupbox.setFont(QtGui.QFont(
+            "Helvetica", 16, QtGui.QFont.Bold))
         # self.type_groupbox.setTitle("<font color='blue'>题目类型22</font>")
         self.type_groupbox.setStyleSheet("font-size: 16px;")
         palette = QtGui.QPalette()
@@ -157,19 +173,22 @@ class MyWidget(QtWidgets.QWidget):
 
         # 题目
         self.other_groupbox = QtWidgets.QGroupBox("题目")
-        self.other_groupbox.setFont(QtGui.QFont("Helvetica", 16, QtGui.QFont.Bold))
+        self.other_groupbox.setFont(QtGui.QFont(
+            "Helvetica", 16, QtGui.QFont.Bold))
         self.other_groupbox.setStyleSheet("font-size: 16px;")
         palette = QtGui.QPalette()
         palette.setColor(QtGui.QPalette.WindowText, QtGui.QColor("blue"))
         self.other_groupbox.setPalette(palette)
 
         self.label_A = QtWidgets.QLabel(self)
-        self.label_A.setFont(QtGui.QFont("Times New Roman", 25, QtGui.QFont.Bold))
+        self.label_A.setFont(QtGui.QFont(
+            "Times New Roman", 25, QtGui.QFont.Bold))
         self.label_A.setText("                   ")
         self.label_A.setStyleSheet("font-size: 25px;")
 
         self.label_B = QtWidgets.QLabel(self)
-        self.label_B.setFont(QtGui.QFont("Times New Roman", 25, QtGui.QFont.Bold))
+        self.label_B.setFont(QtGui.QFont(
+            "Times New Roman", 25, QtGui.QFont.Bold))
         self.label_B.setText("    ")
         self.label_B.setStyleSheet("font-size: 25px;")
 
@@ -177,7 +196,8 @@ class MyWidget(QtWidgets.QWidget):
         self.label_C.setStyleSheet("font-size: 25px;")
 
         self.line_edit = QtWidgets.QLineEdit(self)
-        self.line_edit.setFont(QtGui.QFont("Times New Roman", 25, QtGui.QFont.Bold))
+        self.line_edit.setFont(QtGui.QFont(
+            "Times New Roman", 25, QtGui.QFont.Bold))
         self.line_edit.setPlaceholderText("结果")
         self.line_edit.setStyleSheet("font-size: 25px;")
 
@@ -198,7 +218,7 @@ class MyWidget(QtWidgets.QWidget):
         layout.addLayout(h_layout)
         layout.addWidget(self.generate_button)
         layout.addWidget(self.verify_button)
-        layout.addWidget(self.label_C, alignment=Qt.AlignCenter)
+        layout.addWidget(self.label_C, alignment=QtCore.Qt.AlignCenter)
 
         self.other_groupbox.setLayout(layout)
 
