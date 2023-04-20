@@ -1,4 +1,5 @@
 import sys
+import os
 import random
 from enum import Enum, unique
 from typing import Type
@@ -28,21 +29,32 @@ class CalcType(str, Enum):
 class MyWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        path = sys.argv[0]  # 获取本文件路径
+        print(path)
+        filename = os.path.basename(path)  # 获取本文件名
+        self.path = os.path.dirname(os.path.realpath(sys.argv[0]))  # 获取本文件所在目录
+        print(self.path)
+        filelist = os.listdir(self.path)  # 获取文件名列表
+        filelist.remove(filename)  # 从目录的文件里面去除本文件的文件名
+        print(filelist)
+
         self.select = CalcType.Addition
         self.result = 0
         self.setWindowTitle("20以内加减法")
         self.resize(400, 400)
         self.setup_ui()
-        self.print_20_mix()
-        self.label_C.setPixmap(QtGui.QPixmap("None.png"))
+        self.d_generate()
+
         self.correct_player =  QtMultimedia.QSoundEffect()
-        self.correct_player.setSource(QtCore.QUrl.fromLocalFile("correct.wav"))
+        self.correct_player.setSource(QtCore.QUrl.fromLocalFile(self.path + "/src/correct.wav"))
         self.correct_player.setLoopCount(1)
         self.correct_player.setVolume(1.0)
         self.incorrect_player = QtMultimedia.QSoundEffect()
-        self.incorrect_player.setSource(QtCore.QUrl.fromLocalFile("incorrect.wav"))
+        self.incorrect_player.setSource(QtCore.QUrl.fromLocalFile(self.path + "/src/incorrect.wav"))
         self.incorrect_player.setLoopCount(1)
         self.incorrect_player.setVolume(1.0)
+        
     def print_calc(self, a: int, b: int, c: int, operator1: str, operator2: str) -> str:
         valid_operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
         if operator1 not in valid_operators or operator2 not in valid_operators:
@@ -99,15 +111,15 @@ class MyWidget(QtWidgets.QWidget):
             if self.result == int(self.line_edit.text()):
                 self.label_B.setStyleSheet("color:green;")
                 self.label_B.setText("✓")
-                self.label_C.setPixmap(QtGui.QPixmap("laught.png"))
+                self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/laught.png"))
                 # self.correct_player.play()
-                play_audio_file_async("correct.wav")
+                play_audio_file_async(self.path + "/src/correct.wav")
             else:
                 self.label_B.setStyleSheet("color:red;")
                 self.label_B.setText("✗")
-                self.label_C.setPixmap(QtGui.QPixmap("cry.png"))
+                self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/cry.png"))
                 # self.incorrect_player.play()
-                play_audio_file_async("incorrect.wav")
+                play_audio_file_async(self.path + "/src/incorrect.wav")
         except ValueError:
             message_box = QtWidgets.QMessageBox()
             message_box.setText("请输入数字！")
@@ -117,7 +129,7 @@ class MyWidget(QtWidgets.QWidget):
         self.print_20_mix()
         self.line_edit.setText("")
         self.label_B.setText("    ")
-        self.label_C.setPixmap(QtGui.QPixmap("None.png"))
+        self.label_C.setPixmap(QtGui.QPixmap(self.path + "/src/None.png"))
 
     def setup_ui(self) -> None:
         """设置界面"""
