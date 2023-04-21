@@ -27,7 +27,7 @@ jobs:
       with:
         main: ./main
         artifact: Program
-        icon: /src/main.ico
+        icon: /src/main
         python_version: 3.x
         pyinstaller_version: 5.10.0
         use-dependencies: true
@@ -46,10 +46,31 @@ jobs:
         with:
           main: ./main
           artifact: Program.exe
-          icon: /src/main.ico
+          icon: /src/mainpi
           python_version: 3.x
           pyinstaller_version: 5.10.0
           use-dependencies: true
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: python_exe
+          path: dist
+  build_macOS:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+      - name: build exe with pyinstaller
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip 
+          pip install -r requirements.txt
+          pip install pyinstaller==5.10.0
+          pyinstaller --clean -y -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --name main --onefile ./main.py
+          # chown -R $(stat -c '%u:%g' .) ./dist
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
