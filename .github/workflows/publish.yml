@@ -36,7 +36,7 @@ jobs:
         python -m pip install --upgrade pip 
         pip install -r requirements.txt
         pip install pyinstaller==5.10.0
-        pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py
+        pyinstaller -w -p pyside6 -p ./src --add-data ./src/*:./src --icon ./src/main.icns --onefile main.py
         # chown -R $(stat -c '%u:%g' .) ./dist
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
