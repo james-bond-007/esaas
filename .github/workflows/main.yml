@@ -41,15 +41,18 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Test Build Python Exe
-        uses: james-bond-007/pyinstaller-build@master
+      - name: setup python
+        uses: actions/setup-python@v3
         with:
-          main: ./main
-          artifact: Program.exe
-          icon: /src/mainpi
-          python_version: 3.x
-          pyinstaller_version: 5.10.0
-          use-dependencies: true
+          python-version: 3.x
+      - name: build exe with pyinstaller
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip 
+          pip install -r requirements.txt
+          pip install pyinstaller==5.10.0
+          pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.ico --onefile main.py
+          # chown -R $(stat -c '%u:%g' .) ./dist
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -69,10 +72,10 @@ jobs:
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
-          pyinstaller --clean -y -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --name main --onefile ./main.py
+          pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py
           # chown -R $(stat -c '%u:%g' .) ./dist
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: python_exe
+          name: python_mac
           path: dist
