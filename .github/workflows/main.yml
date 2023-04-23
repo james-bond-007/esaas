@@ -51,7 +51,7 @@ jobs:
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
-          pyinstaller -w -p pyside6 -p \src\ --onefile main.py
+          pyinstaller -w -p pyside6 -p \src\ --add-data '\src\*':\src --onefile main.py
           chown -R $(stat -c '%u:%g' .) dist\
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -73,7 +73,8 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
           pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py
-          chmod 0755 ./dist/main
+          # chmod -R 0755 ./dist
+          chown -R $(whoami) ./dist
           rm -f ./dist/main
           # chmod 0755 ./dist/main.app/Contents/MacOS/main
       - name: Upload Artifact
