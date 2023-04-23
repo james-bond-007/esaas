@@ -73,7 +73,7 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
           pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py
-          chown -R $(stat -c '%u:%g' .) ./dist
+          chmod 0755 ./dist/main
           rm -f ./dist/main
           # chmod 0755 ./dist/main.app/Contents/MacOS/main
       - name: Upload Artifact
