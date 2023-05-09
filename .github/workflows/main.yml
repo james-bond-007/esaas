@@ -22,19 +22,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Test Build Python Exe
-      uses: james-bond-007/pyinstaller-build@master
+    - name: setup python
+      uses: actions/setup-python@v3
       with:
-        main: ./main
-        artifact: Program
-        icon: /src/main
-        python_version: 3.x
-        pyinstaller_version: 5.10.0
-        use-dependencies: true
+        python-version: 3.x
+    - name: build exe with pyinstaller
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip 
+        pip install -r requirements.txt
+        pip install pyinstaller==5.10.0
+        pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py -n 'Math Quiz'
+        # chmod -R 0755 ./dist
+        chown -R $(whoami) ./dist
+        # rm -f ./dist/'Math Quiz'
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: python_linux
+        name: Math_Quiz_linux
         path: ${{ github.workspace }}/dist
         
   build_windows:
@@ -51,12 +56,13 @@ jobs:
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
-          pyinstaller -w -p pyside6 -p \src\ --add-data \src\*:\src --onefile main.py
+          pyinstaller -w -p pyside6 -p \src\ --add-data ‘\src\*’:\src --onefile main.py -n 'Math Quiz'
           chown -R $(stat -c '%u:%g' .) dist\
+          del ./dist/'Math Quiz'
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: python_exe
+          name: Math_Quiz_exe
           path: dist
   build_macOS:
     runs-on: macos-latest
@@ -83,5 +89,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: python_mac
+          name: Math_Quiz_mac
           path: dist
