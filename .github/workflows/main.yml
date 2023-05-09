@@ -56,9 +56,9 @@ jobs:
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
           pip install pyinstaller==5.10.0
-          pyinstaller -w -p pyside6 -p \src\ --add-data '\src\*;\src' --icon ./src/main.ico --onefile main.py -n 'Math Quiz'
-          chown -R $(stat -c '%u:%g' .) dist\
-          del ./dist/'Math Quiz'
+          pyinstaller -w -p pyside6 -p .\src\ --add-data '.\src\*;.\src' --icon ./src/main.ico --onefile main.py -n 'Math Quiz'
+          # chown -R $(stat -c '%u:%g' .) ./dist/
+          # del ./dist/'Math Quiz'
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
