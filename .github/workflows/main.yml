@@ -35,7 +35,7 @@ jobs:
         pyinstaller -w -p pyside6 -p ./src --add-data ./src/*:./src --icon ./src/main.icns --onefile main.py -n 'Math Quiz'
         # chmod -R 0755 ./dist
         chown -R $(whoami) ./dist
-        rm -f ./dist/'Math Quiz'
+        # rm -f ./dist/'Math Quiz'
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
