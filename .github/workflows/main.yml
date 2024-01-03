@@ -31,7 +31,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip 
         pip install -r requirements.txt
-        pip install pyinstaller==5.10.0
+        pip install pyinstaller
         pyinstaller -w -p pyside6 -p ./src --add-data ./src/*:./src --icon ./src/main.icns --onefile main.py -n 'Math Quiz'
         # chmod -R 0755 ./dist
         chown -R $(whoami) ./dist
@@ -55,7 +55,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
-          pip install pyinstaller==5.10.0
+          pip install pyinstaller
           pyinstaller -w -p pyside6 -p ./src/ --add-data './src/*;./src' --icon ./src/main.ico --onefile ./main.py -n 'Math Quiz'
           # chown -R $(stat -c '%u:%g' .) .\dist\
           # del ./dist/'Math Quiz'
@@ -77,7 +77,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip 
           pip install -r requirements.txt
-          pip install pyinstaller==5.10.0
+          pip install pyinstaller
           pyinstaller -w -p pyside6 -p ./src --add-data './src/*':./src --icon ./src/main.icns --onefile main.py -n 'Math Quiz'
           # chmod -R 0755 ./dist
           chown -R $(whoami) ./dist
@@ -91,6 +91,7 @@ jobs:
         with:
           name: Math_Quiz_mac
           path: dist
+      
       - name: 设置版本号
         run: |
           pip install bumpversion
@@ -110,12 +111,6 @@ jobs:
           echo "::set-output name=tag::$tag"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 上传程序到发布
-        uses: actions/upload-artifact@v3
-        with:
-          name: Math_Quiz
-          path: dist
 
       - name: 附加程序到发布
         run: |
