@@ -92,31 +92,31 @@ jobs:
           name: Math_Quiz_mac
           path: dist
       
-      - name: 设置版本号
-        run: |
-          pip install bumpversion
-          bumpversion setup.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  - name: 设置版本号
+    run: |
+      pip install bumpversion
+      bumpversion --config-file setup.py
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 创建发布
-        id: create_release
-        run: |
-          tag=$(git describe --tags --abbrev=0)
-          echo "创建发布 $tag"
-          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -X POST -d '{"tag_name": "'"$tag"'", "name": "'"$tag"'", "draft": false, "prerelease": false}' \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
-          echo "::set-output name=tag::$tag"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  - name: 创建发布
+    id: create_release
+    run: |
+      tag=$(git describe --tags --abbrev=0)
+      echo "创建发布 $tag"
+      curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        -X POST -d '{"tag_name": "'"$tag"'", "name": "'"$tag"'", "draft": false, "prerelease": false}' \
+        "https://api.github.com/repos/${{ github.repository }}/releases"
+      echo "::set-output name=tag::$tag"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 附加程序到发布
-        run: |
-          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/zip" \
-            --data-binary "@dist/Math_Quiz.zip" \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz.zip"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  - name: 附加程序到发布
+    run: |
+      curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/zip" \
+        --data-binary "@dist/Math_Quiz.zip" \
+        "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz.zip"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
