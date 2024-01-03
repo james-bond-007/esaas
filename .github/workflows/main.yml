@@ -94,7 +94,7 @@ jobs:
       - name: 设置版本号
         run: |
           pip install bumpversion
-          bumpversion <your_version_file>
+          bumpversion setup.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
