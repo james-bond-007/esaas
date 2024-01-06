@@ -1,10 +1,9 @@
-name: Release
+name: Release Build Artifacts
 
 on:
-  workflow_run:
-    workflows: ["Test Build Python Exe"]
+  release:
     types:
-      - completed
+      - created
 
 jobs:
   release:
@@ -14,40 +13,40 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
         with:
-          python-version: 3.x
+          name: Math_Quiz  # 这里使用你之前上传的 artifact 的名称
+          path: dist
 
-      - name: Install Dependencies
+      - name: Extract Artifacts
         run: |
-          python -m pip install --upgrade pip
-          pip install bumpversion
+          unzip dist/Math_Quiz_linux.zip -d dist/Math_Quiz_linux
+          unzip dist/Math_Quiz_exe.zip -d dist/Math_Quiz_exe
+          unzip dist/Math_Quiz_mac.zip -d dist/Math_Quiz_mac
 
-      - name: Bump Version
-        run: |
-          bumpversion --config-file setup.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release
-        id: create_release
-        run: |
-          tag=$(git describe --tags --abbrev=0)
-          echo "Creating release $tag"
-          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -X POST -d '{"tag_name": "'"$tag"'", "name": "'"$tag"'", "draft": false, "prerelease": false}' \
-            "https://api.github.com/repos/${{ github.repository }}/releases"
-          echo "::set-output name=tag::$tag"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 这里添加任何你需要的发布步骤，例如将文件打包成 zip，创建安装包等。
 
       - name: Upload Artifacts to Release
-        run: |
-          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/zip" \
-            --data-binary "@dist/Math_Quiz.zip" \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz.zip"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/Math_Quiz_linux
+          asset_name: Math_Quiz_linux.zip
+          asset_content_type: application/zip
+
+      - name: Upload Artifacts to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/Math_Quiz_exe
+          asset_name: Math_Quiz_exe.zip
+          asset_content_type: application/zip
+
+      - name: Upload Artifacts to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/Math_Quiz_mac
+          asset_name: Math_Quiz_mac.zip
+          asset_content_type: application/zip
