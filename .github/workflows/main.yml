@@ -99,22 +99,27 @@ jobs:
       steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Create Git Tag
-        run: git tag -a v0.1.0.0 -m "Release v0.1.0.0"
-        # 替换 'v1.0.0' 为你的实际版本号
-      
-      - name: Push Git Tag
-        run: git push origin v0.1.0.0
-        # 替换 'v1.0.0' 为你的实际版本号
-
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: dist/*
-          title: Release ${{ github.event.workflow_run.conclusion }}
-          body: |
-            Changes in this release:
-            - Add feature X
-            - Fix bug Y
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: TODO New Release.
+          draft: false
+          prerelease: false
+
+      # - name: Create Release
+      #   id: create_release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: dist/*
+      #     title: Release ${{ github.event.workflow_run.conclusion }}
+      #     body: |
+      #       Changes in this release:
+      #       - Add feature X
+      #       - Fix bug Y
+      #     token: ${{ secrets.GITHUB_TOKEN }}
