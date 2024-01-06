@@ -22,7 +22,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Math_Quiz_linux
-          path: ${GITHUB_WORKSPACE}/dist
+          path: dist
 
       - name: Upload Linux Artifact
         uses: actions/upload-release-asset@v1
@@ -36,7 +36,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Math_Quiz_exe
-          path: ${GITHUB_WORKSPACE}/dist
+          path: dist
 
       - name: Upload Windows Artifact
         uses: actions/upload-release-asset@v1
@@ -50,7 +50,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Math_Quiz_mac
-          path: ${GITHUB_WORKSPACE}/dist
+          path: dist
 
       - name: Upload macOS Artifact
         uses: actions/upload-release-asset@v1
