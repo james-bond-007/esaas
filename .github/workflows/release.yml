@@ -17,9 +17,18 @@ jobs:
     - name: Download Artifact
       uses: actions/download-artifact@v2
       with:
-        name: Math_Quiz_*
+        name: Math_Quiz_linux
         path: dist
-
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: Math_Quiz_exe
+        path: dist
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: Math_Quiz_mac
+        path: dist
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
