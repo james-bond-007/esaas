@@ -1,61 +1,33 @@
-name: Release Build Artifacts
+name: Release
 
 on:
-  release:
+  workflow_run:
+    workflows: ["name_of_build_workflow"]
     types:
-      - created
+      - completed
 
 jobs:
   release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.x
+    - name: Download Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: Math_Quiz_*
+        path: dist
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Math_Quiz_linux
-          path: dist
-
-      - name: Upload Linux Artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/Math_Quiz_linux
-          asset_name: Math_Quiz_linux.zip
-          asset_content_type: application/zip
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Math_Quiz_exe
-          path: dist
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/Math_Quiz_exe
-          asset_name: Math_Quiz_exe.zip
-          asset_content_type: application/zip
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: Math_Quiz_mac
-          path: dist
-
-      - name: Upload macOS Artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/Math_Quiz_mac
-          asset_name: Math_Quiz_mac.zip
-          asset_content_type: application/zip
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/*
+        title: Release ${{ github.event.workflow_run.conclusion }}
+        body: |
+          Changes in this release:
+          - Add feature X
+          - Fix bug Y
+        token: ${{ secrets.GITHUB_TOKEN }}
