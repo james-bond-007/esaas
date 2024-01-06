@@ -40,8 +40,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Math_Quiz_linux
-        path: ${{ github.workspace }}/dist
-        
+        path: dist
   build_windows:
     runs-on: windows-latest
     steps:
