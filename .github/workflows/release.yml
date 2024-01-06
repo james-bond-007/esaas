@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["name_of_build_workflow"]
+    workflows: ["Test Build Python Exe"]
     types:
       - completed
 
