@@ -97,7 +97,6 @@ jobs:
       - build_windows
       - build_macOS
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -135,7 +134,15 @@ jobs:
         run: |
           curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/zip" \
-            --data-binary "@dist/Math_Quiz.zip" \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz.zip"
+            --data-binary "@dist/Math_Quiz_linux.zip" \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz_linux.zip"
+          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@dist/Math_Quiz_exe.zip" \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz_exe.zip"
+          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@dist/Math_Quiz_mac.zip" \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.tag }}/assets?name=Math_Quiz_mac.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
