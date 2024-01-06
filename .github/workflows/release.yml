@@ -13,21 +13,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
         with:
-          name: Math_Quiz  # 这里使用你之前上传的 artifact 的名称
-          path: dist
+          python-version: 3.x
 
-      - name: Extract Artifacts
-        run: |
-          unzip dist/Math_Quiz_linux.zip -d dist/Math_Quiz_linux
-          unzip dist/Math_Quiz_exe.zip -d dist/Math_Quiz_exe
-          unzip dist/Math_Quiz_mac.zip -d dist/Math_Quiz_mac
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Math_Quiz_linux
+          path: ${GITHUB_WORKSPACE}/dist
 
-      # 这里添加任何你需要的发布步骤，例如将文件打包成 zip，创建安装包等。
-
-      - name: Upload Artifacts to Release
+      - name: Upload Linux Artifact
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
@@ -35,7 +32,13 @@ jobs:
           asset_name: Math_Quiz_linux.zip
           asset_content_type: application/zip
 
-      - name: Upload Artifacts to Release
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Math_Quiz_exe
+          path: ${GITHUB_WORKSPACE}/dist
+
+      - name: Upload Windows Artifact
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
@@ -43,7 +46,13 @@ jobs:
           asset_name: Math_Quiz_exe.zip
           asset_content_type: application/zip
 
-      - name: Upload Artifacts to Release
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Math_Quiz_mac
+          path: ${GITHUB_WORKSPACE}/dist
+
+      - name: Upload macOS Artifact
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
